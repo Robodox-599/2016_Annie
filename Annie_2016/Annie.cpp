@@ -76,9 +76,9 @@ private:
 		SmartDashboard::PutBoolean("Compressor On?", manip->compressorState()); //oi->getDashboard()->PutBoolean("Compressor On?", manip->compressorState());
 		SmartDashboard::PutNumber("Gyro Value", drive->navX->GetAngle());
 
-		//chooser->AddDefault("Auto 1", new Autonomous1()); need many autonomous as we need
-		//chooser->AddDefault("Auto 2", new Autonomous2());
-		SmartDashboard::PutData("Autonomous Modes", chooser);
+		//chooser->AddDefault("Auto 1", /*new Autonomous1()*/); //need many autonomous as we need
+		//chooser->AddDefault("Auto 2", /*new Autonomous2()*/);
+		SmartDashboard::PutData("Autonomous Modes", chooser); //not displaying because there are no input
 	}
 
 	void TestPeriodic()
