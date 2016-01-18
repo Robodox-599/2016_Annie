@@ -31,8 +31,6 @@ private:
 		catapult = new Catapult(oi);
 		chooser = new SendableChooser();
 
-		printSmartDashboard(); // 01/16/2016 Added this function because we suspect that this functino is not a built-in function, so we have to call it
-
 	}
 
 	void AutonomousInit()
@@ -66,6 +64,7 @@ private:
 
 		// TJF: removed only because it doesn't work yet
 		catapult->launchBall();
+		printSmartDashboard(); // 01/18/2016 moved this function because it needed to be updated constantly instead of initializing it only once.
 
 	}
 
