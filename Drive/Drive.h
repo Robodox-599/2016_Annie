@@ -28,13 +28,22 @@ public:
 	float getGyroDashboard();
 	AHRS* navX;
 
-private:
 	CANTalon *frontLeftMotor;
 	CANTalon *rearLeftMotor;
 	CANTalon *frontRightMotor;
 	CANTalon *rearRightMotor;
+
+private:
+
+	/*CANTalon *frontLeftMotor;
+	CANTalon *rearLeftMotor;
+	CANTalon *frontRightMotor;
+	CANTalon *rearRightMotor;*/
+
+	//moved drive motors in order to make it easier to print out values to smart dash board
+
 	DoubleSolenoid *shifter;
 	float leftCmd;
-	float rightCmd;	
+	float rightCmd;
 };
 #endif

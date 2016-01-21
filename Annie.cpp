@@ -79,6 +79,18 @@ private:
 		//chooser->AddDefault("Auto 1", /*new Autonomous1()*/); //need many autonomous as we need
 		//chooser->AddDefault("Auto 2", /*new Autonomous2()*/);
 		SmartDashboard::PutData("Autonomous Modes", chooser); //not displaying because there are no input
+
+		//Returns Encoder Position(with tick)
+		SmartDashboard::PutNumber("Front Left Encoder Position", drive->frontLeftMotor->GetEncPosition());
+		SmartDashboard::PutNumber("Front Right Encoder Position", drive->frontRightMotor->GetEncPosition());
+		SmartDashboard::PutNumber("Back Left Encoder Position", drive->rearLeftMotor->GetEncPosition());
+		SmartDashboard::PutNumber("Back Right Encoder Position", drive->rearLeftMotor->GetEncPosition());
+
+		//Returns how fast the wheel is spinning
+		SmartDashboard::PutNumber("Front Left Encoder Speed", drive->frontLeftMotor->GetEncVel());
+		SmartDashboard::PutNumber("Front Right Encoder Speed", drive->frontRightMotor->GetEncVel());
+		SmartDashboard::PutNumber("Back Left Encoder Speed", drive->rearLeftMotor->GetEncVel());
+		SmartDashboard::PutNumber("Back Right Encoder Speed", drive->rearRightMotor->GetEncVel());
 	}
 
 	void TestPeriodic()
