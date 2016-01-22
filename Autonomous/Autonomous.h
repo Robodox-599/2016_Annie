@@ -1,6 +1,6 @@
-#ifndef GOSTRAIGHT_H
-#define GOSTRAIGHT_H
-#include "Macros.h"
+#ifndef AUTONOMOUS_H_
+#define AUTONOMOUS_H_
+#include "../Macros.h"
 
 class Autonomous{
 
