@@ -4,6 +4,7 @@
 #include "Manipulator/ManipArm.h"
 #include "Catapult/Catapult.h"
 #include "Operator Interface/OperatorInterface.h"
+#include "Linear Drive/LinearDrive.h"
 
 /*
  *Systems Check 1/14/16 all thing working
@@ -84,7 +85,7 @@ private:
 		SmartDashboard::PutNumber("Front Left Encoder Position", drive->frontLeftMotor->GetEncPosition());
 		SmartDashboard::PutNumber("Front Right Encoder Position", drive->frontRightMotor->GetEncPosition());
 		SmartDashboard::PutNumber("Back Left Encoder Position", drive->rearLeftMotor->GetEncPosition());
-		SmartDashboard::PutNumber("Back Right Encoder Position", drive->rearLeftMotor->GetEncPosition());
+		SmartDashboard::PutNumber("Back Right Encoder Position", drive->rearRightMotor->GetEncPosition());
 
 		//Returns how fast the wheel is spinning
 		SmartDashboard::PutNumber("Front Left Encoder Speed", drive->frontLeftMotor->GetEncVel());
