@@ -15,6 +15,8 @@ public:
 	
 	float setLinVelocity(float linVal);
 	
+	float getAvgEncVal();
+
 	float setTurnSpeed(float turn, bool turboButton);	
 	
 	void setLeftMotors(float velocity);
@@ -45,5 +47,6 @@ private:
 	DoubleSolenoid *shifter;
 	float leftCmd;
 	float rightCmd;
+	float avgEncVal; //average encoder value is used to give approximate accurate drive during autonomous
 };
 #endif
