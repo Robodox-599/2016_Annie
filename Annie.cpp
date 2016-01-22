@@ -90,9 +90,9 @@ private:
 		//Returns how fast the wheel is spinning
 		//deleted two front motors because encoder is attached only to the back talons
 		SmartDashboard::PutNumber("Left Encoder Speed", drive->rearLeftMotor->GetEncVel()); //gives value for both back and front left encoder
-		SmartDashboard::PutNumber("Right Encoder Speed", drive->rearRightMotor->GetEncVel());
+		SmartDashboard::PutNumber("Right Encoder Speed", drive->rearRightMotor->GetEncVel()); //TODO: Does not return right encoder value
 
-		SmartDashboard::PutNumber("Average Encoder Value", drive->getAvgEncVal());
+		SmartDashboard::PutNumber("Average Encoder Value", drive->getAvgEncVal()); //Is working 1/21/2016
 	}
 
 	void TestPeriodic()

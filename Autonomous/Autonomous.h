@@ -17,6 +17,7 @@ public:
 	Autonomous(bool goStraight); //made second constructor for second set of auto
 	~Autonomous();
 
+	//TODO: Autonomous itself does not work. However, the autonomous chooser looks like it works
 	void chooseAuto();
 	void goStraightAutonomous(); //this autonomous was made in order to test out navx, encoder, and smartdashboard chooser
 	void randomAutonomous(); //just an arbitrary autonomous to see if smartdashboard chooser work
