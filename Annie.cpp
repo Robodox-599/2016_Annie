@@ -4,7 +4,11 @@
 #include "Manipulator/ManipArm.h"
 #include "Catapult/Catapult.h"
 #include "Operator Interface/OperatorInterface.h"
+<<<<<<< HEAD
 #include "Linear Drive/LinearDrive.h"
+=======
+#include "Autonomous/Autonomous.h"
+>>>>>>> 016e4bcb17142af9f9d2cc50d72c706b3414c567
 
 /*
  *Systems Check 1/14/16 all thing working
@@ -20,6 +24,7 @@ private:
 	OperatorInterface *oi;
 	Command *autonomousCommand; //an object required to make autonomous button in the smart dashboard
 	SendableChooser *chooser; //all the naming just follows the tutorial: http://wpilib.screenstepslive.com/s/4485/m/26401/l/255419-choosing-an-autonomous-program-from-smartdashboard
+	Autonomous *autonomous;
 
 	void RobotInit()
 	{
@@ -31,7 +36,11 @@ private:
 		oi = new OperatorInterface();
 		catapult = new Catapult(oi);
 		chooser = new SendableChooser();
+		autonomous = new Autonomous();
 
+		chooser->AddDefault("Go Straight Auto", new Autonomous()); //the second parameter require constructor not a function
+		chooser->AddObject("Random Auto",  new Autonomous(true));
+		SmartDashboard::PutData("Autonomous Modes", chooser); //not displaying because there are no input
 	}
 
 	void AutonomousInit()
@@ -77,21 +86,24 @@ private:
 		SmartDashboard::PutBoolean("Compressor On?", manip->compressorState()); //oi->getDashboard()->PutBoolean("Compressor On?", manip->compressorState());
 		SmartDashboard::PutNumber("Gyro Value", drive->navX->GetAngle());
 
-		//chooser->AddDefault("Auto 1", /*new Autonomous1()*/); //need many autonomous as we need
-		//chooser->AddDefault("Auto 2", /*new Autonomous2()*/);
-		SmartDashboard::PutData("Autonomous Modes", chooser); //not displaying because there are no input
-
 		//Returns Encoder Position(with tick)
+<<<<<<< HEAD
 		SmartDashboard::PutNumber("Front Left Encoder Position", drive->frontLeftMotor->GetEncPosition());
 		SmartDashboard::PutNumber("Front Right Encoder Position", drive->frontRightMotor->GetEncPosition());
 		SmartDashboard::PutNumber("Back Left Encoder Position", drive->rearLeftMotor->GetEncPosition());
 		SmartDashboard::PutNumber("Back Right Encoder Position", drive->rearRightMotor->GetEncPosition());
+=======
+		//deleted two front motors because encoder is attached only to the back talons
+		SmartDashboard::PutNumber("Left Encoder Position", drive->rearLeftMotor->GetEncPosition());
+		SmartDashboard::PutNumber("Right Encoder Position", drive->rearRightMotor->GetEncPosition());
+>>>>>>> 016e4bcb17142af9f9d2cc50d72c706b3414c567
 
 		//Returns how fast the wheel is spinning
-		SmartDashboard::PutNumber("Front Left Encoder Speed", drive->frontLeftMotor->GetEncVel());
-		SmartDashboard::PutNumber("Front Right Encoder Speed", drive->frontRightMotor->GetEncVel());
-		SmartDashboard::PutNumber("Back Left Encoder Speed", drive->rearLeftMotor->GetEncVel());
-		SmartDashboard::PutNumber("Back Right Encoder Speed", drive->rearRightMotor->GetEncVel());
+		//deleted two front motors because encoder is attached only to the back talons
+		SmartDashboard::PutNumber("Left Encoder Speed", drive->rearLeftMotor->GetEncVel()); //gives value for both back and front left encoder
+		SmartDashboard::PutNumber("Right Encoder Speed", drive->rearRightMotor->GetEncVel());
+
+		SmartDashboard::PutNumber("Average Encoder Value", drive->getAvgEncVal());
 	}
 
 	void TestPeriodic()
