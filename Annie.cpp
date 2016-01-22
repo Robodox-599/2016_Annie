@@ -82,8 +82,6 @@ private:
 		SmartDashboard::PutBoolean("Compressor On?", manip->compressorState()); //oi->getDashboard()->PutBoolean("Compressor On?", manip->compressorState());
 		SmartDashboard::PutNumber("Gyro Value", drive->navX->GetAngle());
 
-		SmartDashboard::PutBoolean("Random Autonomous", autonomous->autonomousIsOn); //checks if the random autonomous is working
-
 		//Returns Encoder Position(with tick)
 		//deleted two front motors because encoder is attached only to the back talons
 		SmartDashboard::PutNumber("Left Encoder Position", drive->rearLeftMotor->GetEncPosition());

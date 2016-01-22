@@ -1,5 +1,12 @@
-#ifndef AUTONOMOUS_H_
-#define AUTONOMOUS_H_
+/*
+ * Autonomous.h
+ *
+ *  Created on: Jan 21, 2016
+ *      Author: Admin
+ */
+
+#ifndef AUTONOMOUS_AUTONOMOUS_H_
+#define AUTONOMOUS_AUTONOMOUS_H_
 #include "../Macros.h"
 
 class Autonomous{
@@ -15,8 +22,13 @@ public:
 	void randomAutonomous(); //just an arbitrary autonomous to see if smartdashboard chooser work
 
 	Drive *drive;
+
 private:
 
 	bool autonomousIsOn;
 	int autoType;
 };
+
+
+
+#endif /* AUTONOMOUS_AUTONOMOUS_H_ */
