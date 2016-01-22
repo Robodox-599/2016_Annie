@@ -35,6 +35,8 @@ public:
 	CANTalon *frontRightMotor;
 	CANTalon *rearRightMotor;
 
+	float avgEncVal; //average encoder value is used to give approximate accurate drive during autonomous
+
 private:
 
 	/*CANTalon *frontLeftMotor;
@@ -47,6 +49,5 @@ private:
 	DoubleSolenoid *shifter;
 	float leftCmd;
 	float rightCmd;
-	float avgEncVal; //average encoder value is used to give approximate accurate drive during autonomous
 };
 #endif
