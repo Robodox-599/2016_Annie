@@ -41,13 +41,17 @@ private:
 
 	void AutonomousInit()
 	{
+		printSmartDashboard();//added this command because the smart dashboard might need to be updated will take out if unneeded
 		autonomousCommand = (Command *) chooser->GetSelected(); //Sends which autonomous was chosen
 		autonomousCommand->Start();
 	}
 
 	void AutonomousPeriodic()
 	{
+		printSmartDashboard();//added this command because the smart dashboard might need to be updated will take out if unneeded
+		SmartDashboard::PutBoolean("Autonomous Debug", true);//debuging. ckecking if the program get to this point
 		Scheduler::GetInstance()->Run(); //runs scheduled autonomous from auto init
+		drive->getAvgEncVal();
 	}
 
 	void TeleopInit()
@@ -67,6 +71,7 @@ private:
 		// TJF: Replaced "magic numbers" with named constants
 		manipArm->moveArm(oi->joyDrive->GetRawButton(UP_INTAKE_BUTTON), oi->joyDrive->GetRawButton(DOWN_INTAKE_BUTTON)); //manipArm->moveArm(oi->joyDrive->GetRawButton(6), oi->joyDrive->GetRawButton(7));
 		manip->intakeBall(oi->joyDrive->GetRawButton(INTAKE_BUTTON), oi->joyDrive->GetRawButton(OUTTAKE_BUTTON), (oi->joyDrive->GetThrottle()+1)/2);
+
 
 		// TJF: removed only because it doesn't work yet
 		catapult->launchBall();
