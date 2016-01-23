@@ -13,16 +13,16 @@ public:
 	void shift(bool highButton, bool lowButton);
 	bool getShiftState();
 	
-	float setLinVelocity(float linVal);
+	void setForwardSpeed(float forward);
 	
 	float getAvgEncVal();
 
-	float setTurnSpeed(float turn, bool turboButton);	
+	void setTurnSpeed(float turn);
 	
 	void setLeftMotors(float velocity);
 	void setRightMotors(float velocity);
 
-	void drive(float joyY, float joyX);
+	void drive(float xAxis, float yAxis);
 
 	// TJF: Test only function
 	void TestSpeedController(int device_id, float velocity);
@@ -47,7 +47,7 @@ private:
 	//moved drive motors in order to make it easier to print out values to smart dash board
 
 	DoubleSolenoid *shifter;
-	float leftCmd;
-	float rightCmd;
+	float forwardSpeed;
+	float turnSpeed;
 };
 #endif

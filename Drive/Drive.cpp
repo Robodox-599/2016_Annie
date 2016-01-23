@@ -11,8 +11,8 @@ Drive::Drive()
 	rearRightMotor = new CANTalon(DRIVE_REAR_RIGHT_MOTOR_CHANNEL);
 
 	navX = new AHRS(SPI::Port::kMXP);
-	leftCmd = 0;
-	rightCmd = 0;
+	forwardSpeed = 0;
+	turnSpeed = 0;
 	avgEncVal = 0;
 }
 
@@ -47,32 +47,34 @@ bool Drive::getShiftState()
 	return false;
 }
 
-float Drive::setLinVelocity(float linVal)
-{
-	if(linVal > DEADZONE)
-		return linVal;
-	else if(linVal < -DEADZONE)
-		return linVal;
-	else 
-		return 0; //NEUTRAL
-}
-
 float Drive::getAvgEncVal()
 {
 	avgEncVal = (rearLeftMotor->GetEncPosition() + rearRightMotor->GetEncPosition())/2;
 	return avgEncVal;
 }
 
-float Drive::setTurnSpeed(float turn, bool turboButton)
+void Drive::setForwardSpeed(float forward)
 {
-	if((turn > DEADZONE && !turboButton) || (turn < -DEADZONE && !turboButton)) 
-		return turn * REDUCTION;
-	if(turn < DEADZONE && turn > -DEADZONE)
-		return 0; //NEUTRAL
-	if((turn > DEADZONE && turboButton) || (turn < -DEADZONE && turboButton)) 
-		return turn;
-	//Needed a default return value even though all possibilities are covered
-	return 0;
+	if(forward >= DEADZONE || forward <= -DEADZONE)
+	{
+		forwardSpeed = forward;
+	}
+	else
+	{
+		forwardSpeed = 0;
+	}
+}
+
+void Drive::setTurnSpeed(float turn)
+{
+	if(turn >= DEADZONE || turn <= -DEADZONE)
+	{
+		turnSpeed = turn;
+	}
+	else
+	{
+		turnSpeed = 0;
+	}
 }
 
 // TJF: Swapped motor logic to reflect physical robot configuration instead of reversing everything.
@@ -89,38 +91,14 @@ void Drive::setRightMotors(float velocity)
 	rearRightMotor->Set(-velocity); //rearRightMotor->Set(velocity);
 }
 
-void Drive::drive(float joyY, float joyX)
+void Drive::drive(float xAxis, float yAxis)
 {
-	leftCmd  = setLinVelocity(joyY - joyX); //leftCmd = setLinVelocity(joyY +  joyX);
-	rightCmd = setLinVelocity(joyY + joyX); //rightCmd = setLinVelocity(joyY - joyX);
-	
-	setLeftMotors(leftCmd);
-	setRightMotors(rightCmd);
+	setForwardSpeed(xAxis);
+	setTurnSpeed(yAxis);
+
+	setLeftMotors(forwardSpeed - turnSpeed);
+	setRightMotors(forwardSpeed + turnSpeed);
 }
 
-// TJF: Test only function, not needed anymore.
-void Drive::TestSpeedController(int device_id, float velocity)
-{
-	CANTalon* uut;
 
-	switch(device_id)
-	{
-	case DRIVE_FRONT_LEFT_MOTOR_CHANNEL:
-		uut = frontLeftMotor;
-		break;
-	case DRIVE_REAR_LEFT_MOTOR_CHANNEL:
-		uut = frontLeftMotor;
-		break;
-	case DRIVE_FRONT_RIGHT_MOTOR_CHANNEL:
-		uut = frontLeftMotor;
-		break;
-	case DRIVE_REAR_RIGHT_MOTOR_CHANNEL:
-		uut = frontLeftMotor;
-		break;
-	default:
-		return;
-	}
-
-	uut->Set(velocity);
-}
 

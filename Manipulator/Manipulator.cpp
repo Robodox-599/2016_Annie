@@ -8,6 +8,8 @@ Manipulator::Manipulator()
 
 	compState = true;
 
+	comp599->SetClosedLoopControl(true);
+
 	step = 0;
 	count = 0;
 }
