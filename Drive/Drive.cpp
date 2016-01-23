@@ -13,6 +13,7 @@ Drive::Drive()
 	navX = new AHRS(SPI::Port::kMXP);
 	leftCmd = 0;
 	rightCmd = 0;
+	avgEncVal = 0;
 }
 
 Drive::~Drive()
@@ -54,6 +55,12 @@ float Drive::setLinVelocity(float linVal)
 		return linVal;
 	else 
 		return 0; //NEUTRAL
+}
+
+float Drive::getAvgEncVal()
+{
+	avgEncVal = (rearLeftMotor->GetEncPosition() + rearRightMotor->GetEncPosition())/2;
+	return avgEncVal;
 }
 
 float Drive::setTurnSpeed(float turn, bool turboButton)
