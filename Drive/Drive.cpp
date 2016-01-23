@@ -67,7 +67,7 @@ float Drive::setTurnSpeed(float turn, bool turboButton)
 {
 	if((turn > DEADZONE && !turboButton) || (turn < -DEADZONE && !turboButton)) 
 		return turn * REDUCTION;
-	if(turn < DEADZONE && turn > -DEADZONE) 
+	if(turn < DEADZONE && turn > -DEADZONE)
 		return 0; //NEUTRAL
 	if((turn > DEADZONE && turboButton) || (turn < -DEADZONE && turboButton)) 
 		return turn;
