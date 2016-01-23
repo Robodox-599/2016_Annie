@@ -21,7 +21,7 @@ Autonomous::~Autonomous()
 
 void Autonomous::goStraightAutonomous()
 {
-	autonomousIsOn = true;
+	autonomousIsOn = true; //TODO: does this require while loop?
 
 	if(drive->avgEncVal < 5000) //drives for 4-5 wheel rotation
 	{
