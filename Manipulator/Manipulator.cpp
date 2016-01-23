@@ -7,7 +7,7 @@ Manipulator::Manipulator()
 	comp599->Start();
 
 	compState = true;
-
+	//not working as of 1-23-2016
 	comp599->SetClosedLoopControl(true);
 
 	step = 0;
