@@ -15,6 +15,8 @@ public:
 	
 	float setLinVelocity(float linVal);
 	
+	float getAvgEncVal();
+
 	float setTurnSpeed(float turn, bool turboButton);	
 	
 	void setLeftMotors(float velocity);
@@ -32,6 +34,8 @@ public:
 	CANTalon *rearLeftMotor;
 	CANTalon *frontRightMotor;
 	CANTalon *rearRightMotor;
+
+	float avgEncVal; //average encoder value is used to give approximate accurate drive during autonomous
 
 private:
 
