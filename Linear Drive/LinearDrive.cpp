@@ -164,4 +164,3 @@ bool LinearDrive::getisRotDoneOverride()
 	return isRotDoneOverride;
 }
 
-

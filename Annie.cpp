@@ -4,11 +4,8 @@
 #include "Manipulator/ManipArm.h"
 #include "Catapult/Catapult.h"
 #include "Operator Interface/OperatorInterface.h"
-<<<<<<< HEAD
 #include "Linear Drive/LinearDrive.h"
-=======
 #include "Autonomous/Autonomous.h"
->>>>>>> 016e4bcb17142af9f9d2cc50d72c706b3414c567
 
 /*
  *Systems Check 1/14/16 all thing working
@@ -87,16 +84,16 @@ private:
 		SmartDashboard::PutNumber("Gyro Value", drive->navX->GetAngle());
 
 		//Returns Encoder Position(with tick)
-<<<<<<< HEAD
+
 		SmartDashboard::PutNumber("Front Left Encoder Position", drive->frontLeftMotor->GetEncPosition());
 		SmartDashboard::PutNumber("Front Right Encoder Position", drive->frontRightMotor->GetEncPosition());
 		SmartDashboard::PutNumber("Back Left Encoder Position", drive->rearLeftMotor->GetEncPosition());
 		SmartDashboard::PutNumber("Back Right Encoder Position", drive->rearRightMotor->GetEncPosition());
-=======
+
 		//deleted two front motors because encoder is attached only to the back talons
 		SmartDashboard::PutNumber("Left Encoder Position", drive->rearLeftMotor->GetEncPosition());
 		SmartDashboard::PutNumber("Right Encoder Position", drive->rearRightMotor->GetEncPosition());
->>>>>>> 016e4bcb17142af9f9d2cc50d72c706b3414c567
+
 
 		//Returns how fast the wheel is spinning
 		//deleted two front motors because encoder is attached only to the back talons
