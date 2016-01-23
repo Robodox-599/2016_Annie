@@ -13,8 +13,9 @@ class Autonomous{
 
 public:
 
-	Autonomous();
-	Autonomous(bool goStraight); //made second constructor for second set of auto
+	Autonomous(int autoNum);
+	//Using only one constructor because we can switch autonomous in a function
+	//Autonomous(bool goStraight); //made second constructor for second set of auto
 	~Autonomous();
 
 	//TODO: Autonomous itself does not work. However, the autonomous chooser looks like it works

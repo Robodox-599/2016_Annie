@@ -1,18 +1,21 @@
 #include "Autonomous.h"
 
-Autonomous::Autonomous()
+//set autoType to autoNum so when Autonomous is initialized the parameter will tell us which autonomous to run
+Autonomous::Autonomous(int autoNum)
 {
 	autonomousIsOn = false;
-	autoType = 0;
+	autoType = autoNum;
 	drive = new Drive();
+
+	chooseAuto();
 }
 
-Autonomous::Autonomous(bool goStraight)
+/*Autonomous::Autonomous(bool goStraight)
 {
 	autonomousIsOn = false;
 	autoType = 1;
 	drive = new Drive();
-}
+}*/
 
 Autonomous::~Autonomous()
 {

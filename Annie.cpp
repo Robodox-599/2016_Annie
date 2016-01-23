@@ -32,10 +32,10 @@ private:
 		oi = new OperatorInterface();
 		catapult = new Catapult(oi);
 		chooser = new SendableChooser();
-		autonomous = new Autonomous();
+		// took out 'autonomous = new Autonomous();' because it is initialized in chooser (below)
 
-		chooser->AddDefault("Go Straight Auto", new Autonomous()); //the second parameter require constructor not a function
-		chooser->AddObject("Random Auto",  new Autonomous(true));
+		chooser->AddDefault("Go Straight Auto", new Autonomous(0)); //the second parameter require constructor not a function
+		chooser->AddObject("Random Auto",  new Autonomous(1));
 		SmartDashboard::PutData("Autonomous Modes", chooser); //not displaying because there are no input
 	}
 
