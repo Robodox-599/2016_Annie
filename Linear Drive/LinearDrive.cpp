@@ -1,10 +1,10 @@
-#include "LinearDrive.h"
+#include "LinearDrive.h" //01/23/2016 - tested out the drive, it does not sag as much as before. Not sure if the Linear Drive is actually working or not. Make sure find out which function we have to implement. -Juyeong Lee
 
 LinearDrive::LinearDrive(AHRS* imuP)
 {
 	imuPointer = imuP;
 	imuYaw = 0;
-	angleTolerance = 2; //change if you want.
+	angleTolerance = 1; //change if you want. It was 1.5
 	rotateLoopCheck = 5;
 	originalAngle = 0;
 	speedWhileRotating = 0;
