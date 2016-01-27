@@ -20,6 +20,8 @@ private:
 	OperatorInterface *oi;
 	Command *autonomousCommand; //an object required to make autonomous button in the smart dashboard
 	SendableChooser *chooser; //all the naming just follows the tutorial: http://wpilib.screenstepslive.com/s/4485/m/26401/l/255419-choosing-an-autonomous-program-from-smartdashboard
+	LinearDrive *linearDrive;
+	AHRS *navX;
 
 	void RobotInit()
 	{
@@ -31,6 +33,8 @@ private:
 		oi = new OperatorInterface();
 		catapult = new Catapult(oi);
 		chooser = new SendableChooser();
+		navX = new AHRS(SPI::Port::kMXP);
+		linearDrive = new LinearDrive(navX);
 
 	}
 
@@ -80,6 +84,9 @@ private:
 		//chooser->AddDefault("Auto 1", /*new Autonomous1()*/); //need many autonomous as we need
 		//chooser->AddDefault("Auto 2", /*new Autonomous2()*/);
 		SmartDashboard::PutData("Autonomous Modes", chooser); //not displaying because there are no input
+		SmartDashboard::PutNumber("Calculated Rotate", linearDrive->CalculateRotValue(0, 1)); //added CalculateRotValue to Smart Dashboard to test for value while driving (1/25/16)
+		SmartDashboard::PutBoolean("Test", true); //oi->getDashboard()->PutBoolean("Compressor On?", manip->compressorState());
+
 	}
 
 	void TestPeriodic()

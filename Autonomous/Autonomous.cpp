@@ -22,7 +22,7 @@ Autonomous::~Autonomous()
 
 }
 
-void Autonomous::goStraightAutonomous()
+/*void Autonomous::goStraightAutonomous()
 {
 	autonomousIsOn = true; //TODO: does this require while loop?
 
@@ -48,16 +48,16 @@ void Autonomous::randomAutonomous()
 	{
 		drive -> drive(0,0);
 	}
-}
+}*/
 
 void Autonomous::chooseAuto()
 {
 	if(autoType == 0)
 	{
-		void goStraightAutonomus();
+		//void goStraightAutonomus();
 	}
 	if(autoType == 1)
 	{
-		void randomAutonomous();
+		//void randomAutonomous();
 	}
 }
