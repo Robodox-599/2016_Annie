@@ -24,6 +24,7 @@ private:
 
 	void RobotInit()
 	{
+		//drive->navX->ZeroYaw();
 		manipArm = new ManipArm();
 		drive = new Drive();
 		manip = new Manipulator();
@@ -76,7 +77,17 @@ private:
 		// TJF: removed only because it doesn't work yet
 		catapult->launchBall();
 		printSmartDashboard(); // 01/18/2016 moved this function because it needed to be updated constantly instead of initializing it only once.
-
+		//emergency stop test
+		if(oi->joyDrive->GetRawButton(6) == 1 || oi->joyDrive->GetRawButton(7) == 1)
+		{
+			while(true)
+			{
+				drive->frontLeftMotor->Set(0);
+				drive->rearLeftMotor->Set(0);
+				drive->frontRightMotor->Set(0);
+				drive->rearRightMotor->Set(0);
+			}
+		}
 	}
 
 	void printSmartDashboard()
@@ -85,7 +96,7 @@ private:
 		SmartDashboard::PutNumber("Drive X-Value", oi->joyDrive->GetRawAxis(TURN_X_AXIS));//oi->getDashboard()->PutNumber("Drive X-Value", oi->joyDrive->GetRawAxis(TURN_X_AXIS));
 
 		SmartDashboard::PutBoolean("Compressor On?", manip->compressorState()); //oi->getDashboard()->PutBoolean("Compressor On?", manip->compressorState());
-		SmartDashboard::PutNumber("Gyro Value", drive->navX->GetAngle());
+		SmartDashboard::PutNumber("Gyro Value", drive->navX->GetYaw());//GetAngle());
 
 		//Returns Encoder Position(with tick)
 		//deleted two front motors because encoder is attached only to the back talons

@@ -80,6 +80,9 @@
 #define MINUTE_CONVERSION						(240)
 #define TICKS_PER_ROTATION						(250)
 
+	//PID
+#define SLOPE_ADJUSTMENT						(.75)//TODO: get correct number
+
 	//Misc
 #define SYNC_STATE_OFF          		        (0)
 #define REDUCTION							    (.5)

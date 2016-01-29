@@ -28,6 +28,9 @@ public:
 	void TestSpeedController(int device_id, float velocity);
 
 	float getGyroDashboard();
+
+	float linearizeDrive(float driveInput);
+
 	AHRS* navX;
 
 	CANTalon *frontLeftMotor;
@@ -47,7 +50,11 @@ private:
 	//moved drive motors in order to make it easier to print out values to smart dash board
 
 	DoubleSolenoid *shifter;
+
 	float forwardSpeed;
 	float turnSpeed;
+
+	float Kp;
+
 };
 #endif

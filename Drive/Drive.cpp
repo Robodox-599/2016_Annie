@@ -11,9 +11,14 @@ Drive::Drive()
 	rearRightMotor = new CANTalon(DRIVE_REAR_RIGHT_MOTOR_CHANNEL);
 
 	navX = new AHRS(SPI::Port::kMXP);
+
 	forwardSpeed = 0;
 	turnSpeed = 0;
 	avgEncVal = 0;
+
+	Kp = .09;//change as needed
+	//1/27/2016- 4:11 pm First test of this system. Robot moved on it's own, but PID was set in motion.
+	navX->ZeroYaw();
 }
 
 Drive::~Drive()
@@ -23,12 +28,14 @@ Drive::~Drive()
 	delete rearLeftMotor;
 	delete frontRightMotor;
 	delete rearRightMotor;
-	
+
 	shifter = NULL;
 	frontLeftMotor = NULL;
 	rearLeftMotor = NULL;
 	frontRightMotor = NULL;
 	rearRightMotor = NULL;
+
+
 }
 
 void Drive::shift(bool highButton, bool lowButton)
@@ -70,7 +77,17 @@ void Drive::setTurnSpeed(float turn)
 	if(turn >= DEADZONE || turn <= -DEADZONE)
 	{
 		turnSpeed = turn;
+
+		navX->ZeroYaw();
 	}
+	else if(navX->GetYaw() <= -0.5 || navX->GetYaw() >= 0.5)//separate into two else if statement one is 0 to 0.5 and second to 359.5 to 360
+	{
+		turnSpeed = Kp * (-navX->GetYaw());//replace 0 to 360 in second else if statements
+	}
+	/*else if(navX->GetYaw() <= 0 || navX->GetYaw() >= .5)
+	{
+		turnSpeed = Kp * (-navX->GetYaw());
+	}*/
 	else
 	{
 		turnSpeed = 0;
@@ -91,14 +108,23 @@ void Drive::setRightMotors(float velocity)
 	rearRightMotor->Set(-velocity); //rearRightMotor->Set(velocity);
 }
 
+float Drive::linearizeDrive(float driveInput)
+{
+	/*if(driveInput > SPEEDLIMIT || driveInput < SPEEDLIMIT)
+	{
+		return SPEEDLIMIT;
+	}
+	return driveInput;*/
+
+	return ((driveInput * SLOPE_ADJUSTMENT) /*- SLOPE_ADJUSTMENT*/);
+}
+
 void Drive::drive(float xAxis, float yAxis)
 {
 	setForwardSpeed(xAxis);
 	setTurnSpeed(yAxis);
 
-	setLeftMotors(forwardSpeed - turnSpeed);
-	setRightMotors(forwardSpeed + turnSpeed);
+	setLeftMotors(linearizeDrive(forwardSpeed - turnSpeed));
+	setRightMotors(linearizeDrive(forwardSpeed + turnSpeed));
 }
-
-
 
