@@ -28,11 +28,11 @@ void Autonomous::goStraightAutonomous()
 
 	if(drive->avgEncVal < 5000) //drives for 4-5 wheel rotation
 	{
-		drive -> drive(0.5, 0.5);
+		//drive -> drive(0.5, 0.5);
 	}
 	else
 	{
-		drive -> drive(0,0);
+		//drive -> drive(0,0);
 	}
 }
 
@@ -42,11 +42,11 @@ void Autonomous::randomAutonomous()
 
 	if(drive->avgEncVal < 5000) //turns for 4-5 wheel rotation
 	{
-		drive -> drive(0.5, -0.5);
+		//drive -> drive(0.5, -0.5);
 	}
 	else
 	{
-		drive -> drive(0,0);
+		//drive -> drive(0,0);
 	}
 }
 

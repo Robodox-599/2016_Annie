@@ -65,7 +65,7 @@ private:
 		manip->toggleCompressor(oi->joyDrive->GetRawButton(COMPRESSOR_BUTTON));
 
 		//drive
-		drive->drive(oi->joyDrive->GetRawAxis(FORWARD_Y_AXIS), oi->joyDrive->GetRawAxis(TURN_X_AXIS));
+		drive->drive(oi->joyDrive->GetRawAxis(FORWARD_Y_AXIS), oi->joyDrive->GetRawAxis(TURN_X_AXIS), oi->joyDrive->GetPOV(0));
 		drive->shift(oi->joyDrive->GetRawButton(8), oi->joyDrive->GetRawButton(9));
 
 		//manipulator
@@ -78,7 +78,7 @@ private:
 		catapult->launchBall();
 		printSmartDashboard(); // 01/18/2016 moved this function because it needed to be updated constantly instead of initializing it only once.
 		//emergency stop test
-		if(oi->joyDrive->GetRawButton(6) == 1 || oi->joyDrive->GetRawButton(7) == 1)
+		if(oi->joyDrive->GetRawButton(7) == 1 && oi->joyDrive->GetRawButton(8) == 1)
 		{
 			while(true)
 			{
@@ -86,6 +86,8 @@ private:
 				drive->rearLeftMotor->Set(0);
 				drive->frontRightMotor->Set(0);
 				drive->rearRightMotor->Set(0);
+
+				SmartDashboard::PutBoolean("Dead Man Switch", true);
 			}
 		}
 	}

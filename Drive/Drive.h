@@ -17,12 +17,12 @@ public:
 	
 	float getAvgEncVal();
 
-	void setTurnSpeed(float turn);
+	void setTurnSpeed(float turn, int POV);
 	
 	void setLeftMotors(float velocity);
 	void setRightMotors(float velocity);
 
-	void drive(float xAxis, float yAxis);
+	void drive(float xAxis, float yAxis, int POV);
 
 	// TJF: Test only function
 	void TestSpeedController(int device_id, float velocity);
@@ -30,6 +30,8 @@ public:
 	float getGyroDashboard();
 
 	float linearizeDrive(float driveInput);
+
+	float setReferenceAngle(int angle);
 
 	AHRS* navX;
 
@@ -53,8 +55,5 @@ private:
 
 	float forwardSpeed;
 	float turnSpeed;
-
-	float Kp;
-
 };
 #endif

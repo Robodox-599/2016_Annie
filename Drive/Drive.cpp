@@ -16,7 +16,6 @@ Drive::Drive()
 	turnSpeed = 0;
 	avgEncVal = 0;
 
-	Kp = .09;//change as needed
 	//1/27/2016- 4:11 pm First test of this system. Robot moved on it's own, but PID was set in motion.
 	navX->ZeroYaw();
 }
@@ -72,7 +71,32 @@ void Drive::setForwardSpeed(float forward)
 	}
 }
 
-void Drive::setTurnSpeed(float turn)
+float Drive::setReferenceAngle(int angle)
+{
+	if(navX->GetYaw() <= 0.5 && navX->GetYaw() >= -0.5)
+	{
+		navX->ZeroYaw();
+	}
+
+	if(angle == -1)
+	{
+		return 0;
+	}
+	else if(angle == 270)
+	{
+		return -90;
+	}
+	else if(angle == 90 || angle == 180)
+	{
+		return angle;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+void Drive::setTurnSpeed(float turn, int POV)
 {
 	if(turn >= DEADZONE || turn <= -DEADZONE)
 	{
@@ -80,14 +104,10 @@ void Drive::setTurnSpeed(float turn)
 
 		navX->ZeroYaw();
 	}
-	else if(navX->GetYaw() <= -0.5 || navX->GetYaw() >= 0.5)//separate into two else if statement one is 0 to 0.5 and second to 359.5 to 360
+	else if(navX->GetYaw() <= 0 || navX->GetYaw() >= 0)
 	{
-		turnSpeed = Kp * (-navX->GetYaw());//replace 0 to 360 in second else if statements
+		turnSpeed = KP * (setReferenceAngle(POV) - navX->GetYaw());
 	}
-	/*else if(navX->GetYaw() <= 0 || navX->GetYaw() >= .5)
-	{
-		turnSpeed = Kp * (-navX->GetYaw());
-	}*/
 	else
 	{
 		turnSpeed = 0;
@@ -119,10 +139,10 @@ float Drive::linearizeDrive(float driveInput)
 	return ((driveInput * SLOPE_ADJUSTMENT) /*- SLOPE_ADJUSTMENT*/);
 }
 
-void Drive::drive(float xAxis, float yAxis)
+void Drive::drive(float xAxis, float yAxis, int POV)
 {
 	setForwardSpeed(xAxis);
-	setTurnSpeed(yAxis);
+	setTurnSpeed(yAxis, POV);
 
 	setLeftMotors(linearizeDrive(forwardSpeed - turnSpeed));
 	setRightMotors(linearizeDrive(forwardSpeed + turnSpeed));

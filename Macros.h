@@ -81,12 +81,13 @@
 #define TICKS_PER_ROTATION						(250)
 
 	//PID
-#define SLOPE_ADJUSTMENT						(.75)//TODO: get correct number
+#define SLOPE_ADJUSTMENT						(.9)//TODO: get correct number
+#define KP 										(.09)
 
 	//Misc
 #define SYNC_STATE_OFF          		        (0)
 #define REDUCTION							    (.5)
-#define DEADZONE								(0.3) //(.15) the joystick axis can be go up to 0.17 at its resting state. Update 2016/01/14: It was 0.2 the left joystick was extremely sensitive
+#define DEADZONE								(0.15) //(.15) the joystick axis can be go up to 0.17 at its resting state. Update 2016/01/14: It was 0.2 the left joystick was extremely sensitive
 #define TICKS_DEADZONE							(10)
 #define INCHES_PER_TICK                			(0.075398)   // circumference of wheel / total 
 #define PI										(3.14159265358979323846264338327950288)
