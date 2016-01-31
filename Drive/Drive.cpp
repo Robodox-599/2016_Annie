@@ -12,6 +12,10 @@ Drive::Drive()
 
 	navX = new AHRS(SPI::Port::kMXP);
 
+	autoTurn = false;
+
+	referenceAngle = 0;
+
 	forwardSpeed = 0;
 	turnSpeed = 0;
 	avgEncVal = 0;
@@ -71,45 +75,40 @@ void Drive::setForwardSpeed(float forward)
 	}
 }
 
-float Drive::setReferenceAngle(int angle)
+void Drive::setReferenceAngle(int angle)
 {
-	if(navX->GetYaw() <= 0.5 && navX->GetYaw() >= -0.5)
+	if(angle == 270 || autoTurn == false)
 	{
-		navX->ZeroYaw();
+		autoTurn = true;
+		referenceAngle = -90;
 	}
-
-	if(angle == -1)
+	else if((angle == 90 && autoTurn == false) || (angle == 180 && autoTurn == false))
 	{
-		return 0;
-	}
-	else if(angle == 270)
-	{
-		return -90;
-	}
-	else if(angle == 90 || angle == 180)
-	{
-		return angle;
+		autoTurn = true;
+		referenceAngle = angle;
 	}
 	else
 	{
-		return 0;
+		referenceAngle = 0;
 	}
 }
 
-void Drive::setTurnSpeed(float turn, int POV)
+void Drive::setTurnSpeed(float turn)
 {
-	if(turn >= DEADZONE || turn <= -DEADZONE)
+	if(turn >= DEADZONE || turn <= -DEADZONE || autoTurn == false)
 	{
 		turnSpeed = turn;
 
+		referenceAngle = 0;
 		navX->ZeroYaw();
 	}
-	else if(navX->GetYaw() <= 0 || navX->GetYaw() >= 0)
+	else if(referenceAngle - navX->GetYaw() < -0.5 || referenceAngle - navX->GetYaw() > 0.5)
 	{
-		turnSpeed = KP * (setReferenceAngle(POV) - navX->GetYaw());
+		turnSpeed = KP * (referenceAngle - navX->GetYaw());
 	}
 	else
 	{
+		autoTurn = false;
 		turnSpeed = 0;
 	}
 }
@@ -141,8 +140,9 @@ float Drive::linearizeDrive(float driveInput)
 
 void Drive::drive(float xAxis, float yAxis, int POV)
 {
+	setReferenceAngle(POV);
 	setForwardSpeed(xAxis);
-	setTurnSpeed(yAxis, POV);
+	setTurnSpeed(yAxis);
 
 	setLeftMotors(linearizeDrive(forwardSpeed - turnSpeed));
 	setRightMotors(linearizeDrive(forwardSpeed + turnSpeed));

@@ -17,7 +17,7 @@ public:
 	
 	float getAvgEncVal();
 
-	void setTurnSpeed(float turn, int POV);
+	void setTurnSpeed(float turn);
 	
 	void setLeftMotors(float velocity);
 	void setRightMotors(float velocity);
@@ -31,7 +31,7 @@ public:
 
 	float linearizeDrive(float driveInput);
 
-	float setReferenceAngle(int angle);
+	void setReferenceAngle(int angle);
 
 	AHRS* navX;
 
@@ -52,6 +52,10 @@ private:
 	//moved drive motors in order to make it easier to print out values to smart dash board
 
 	DoubleSolenoid *shifter;
+
+	bool autoTurn;
+
+	int referenceAngle;
 
 	float forwardSpeed;
 	float turnSpeed;
