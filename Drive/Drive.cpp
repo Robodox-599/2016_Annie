@@ -95,14 +95,14 @@ void Drive::setReferenceAngle(int angle)
 
 void Drive::setTurnSpeed(float turn)
 {
-	if(turn >= DEADZONE || turn <= -DEADZONE || autoTurn == false)
+	if((turn >= DEADZONE && autoTurn == false) || (turn <= -DEADZONE && autoTurn == false)) //changed this from : turn >= or turn <= or autoTurn
 	{
 		turnSpeed = turn;
 
 		referenceAngle = 0;
 		navX->ZeroYaw();
 	}
-	else if(referenceAngle - navX->GetYaw() < -0.5 || referenceAngle - navX->GetYaw() > 0.5)
+	else if(referenceAngle - navX->GetYaw() <= -0.5 || referenceAngle - navX->GetYaw() >= 0.5)//added the equal signs
 	{
 		turnSpeed = KP * (referenceAngle - navX->GetYaw());
 	}
