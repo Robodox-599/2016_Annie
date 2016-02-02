@@ -73,6 +73,8 @@ private:
 		manipArm->moveArm(oi->joyDrive->GetRawButton(UP_INTAKE_BUTTON), oi->joyDrive->GetRawButton(DOWN_INTAKE_BUTTON)); //manipArm->moveArm(oi->joyDrive->GetRawButton(6), oi->joyDrive->GetRawButton(7));
 		manip->intakeBall(oi->joyDrive->GetRawButton(INTAKE_BUTTON), oi->joyDrive->GetRawButton(OUTTAKE_BUTTON), (oi->joyDrive->GetThrottle()+1)/2);
 
+		//oi->joyDrive->SetRumble(Joystick::kRightRumble, .25);
+		//oi->joyDrive->SetRumble(Joystick::kLeftRumble, .25);
 
 		// TJF: removed only because it doesn't work yet
 		catapult->launchBall();
@@ -99,6 +101,10 @@ private:
 
 		SmartDashboard::PutBoolean("Compressor On?", manip->compressorState()); //oi->getDashboard()->PutBoolean("Compressor On?", manip->compressorState());
 		SmartDashboard::PutNumber("Gyro Value", drive->navX->GetYaw());//GetAngle());
+
+		SmartDashboard::PutNumber("Reference Angle", drive->referenceAngle);
+
+		SmartDashboard::PutNumber("Status", drive->status);
 
 		//Returns Encoder Position(with tick)
 		//deleted two front motors because encoder is attached only to the back talons

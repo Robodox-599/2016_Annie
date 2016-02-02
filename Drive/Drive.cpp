@@ -20,6 +20,8 @@ Drive::Drive()
 	turnSpeed = 0;
 	avgEncVal = 0;
 
+	status = 0;
+
 	//1/27/2016- 4:11 pm First test of this system. Robot moved on it's own, but PID was set in motion.
 	navX->ZeroYaw();
 }
@@ -77,17 +79,19 @@ void Drive::setForwardSpeed(float forward)
 
 void Drive::setReferenceAngle(int angle)
 {
-	if(angle == 270 || autoTurn == false)
+	if(angle == 270 && autoTurn == false)
 	{
+		status = 1;
 		autoTurn = true;
 		referenceAngle = -90;
 	}
 	else if((angle == 90 && autoTurn == false) || (angle == 180 && autoTurn == false))
 	{
+		status = 1;
 		autoTurn = true;
 		referenceAngle = angle;
 	}
-	else
+	else if(angle != -1)//try taking this out
 	{
 		referenceAngle = 0;
 	}
@@ -97,19 +101,27 @@ void Drive::setTurnSpeed(float turn)
 {
 	if((turn >= DEADZONE && autoTurn == false) || (turn <= -DEADZONE && autoTurn == false)) //changed this from : turn >= or turn <= or autoTurn
 	{
+
+		status = 2;
 		turnSpeed = turn;
 
 		referenceAngle = 0;
 		navX->ZeroYaw();
 	}
-	else if(referenceAngle - navX->GetYaw() <= -0.5 || referenceAngle - navX->GetYaw() >= 0.5)//added the equal signs
+	else if(referenceAngle - navX->GetYaw() <= -1 || referenceAngle - navX->GetYaw() >= 1)//added the equal signs
 	{
+		status = 3;
 		turnSpeed = KP * (referenceAngle - navX->GetYaw());
+	}
+	else if(referenceAngle - navX->GetYaw() > -1 && referenceAngle - navX->GetYaw() < 1)
+	{
+		turnSpeed = 0;//since joystick is checked above, we can set turnSpeed to 0 since we know that nothing can happen with joystick and there is no error
+		status = 4;
+		autoTurn = false;//did this because some how autoTurn was set to false
 	}
 	else
 	{
-		autoTurn = false;
-		turnSpeed = 0;
+
 	}
 }
 

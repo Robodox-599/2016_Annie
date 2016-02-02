@@ -42,6 +42,10 @@ public:
 
 	float avgEncVal; //average encoder value is used to give approximate accurate drive during autonomous
 
+	int status;//purely for debugging purposes take out after done
+
+	int referenceAngle;
+
 private:
 
 	/*CANTalon *frontLeftMotor;
@@ -54,8 +58,6 @@ private:
 	DoubleSolenoid *shifter;
 
 	bool autoTurn;
-
-	int referenceAngle;
 
 	float forwardSpeed;
 	float turnSpeed;
