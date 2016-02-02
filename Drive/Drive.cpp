@@ -91,10 +91,10 @@ void Drive::setReferenceAngle(int angle)
 		autoTurn = true;
 		referenceAngle = angle;
 	}
-	else if(angle != -1)//try taking this out
+	/*else if(angle != -1)//try taking this out
 	{
-		referenceAngle = 0;
-	}
+		referenceAngle = 0;//took this out (2/2/2016) still need ot test if this works - Carleton
+	}*/
 }
 
 void Drive::setTurnSpeed(float turn)
@@ -119,10 +119,7 @@ void Drive::setTurnSpeed(float turn)
 		status = 4;
 		autoTurn = false;//did this because some how autoTurn was set to false
 	}
-	else
-	{
-
-	}
+	//took out the else statement it had nothing in it
 }
 
 // TJF: Swapped motor logic to reflect physical robot configuration instead of reversing everything.
