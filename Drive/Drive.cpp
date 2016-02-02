@@ -96,7 +96,8 @@ void Drive::setReferenceAngle(int angle)
 		referenceAngle = 0;//took this out (2/2/2016) still need ot test if this works - Carleton
 	}*/
 }
-
+//TODO: add a function for calculating for edges cases in gyro and compensating for them
+//TODO: add a function to calculate the shortest way (left or right) to the desired angle, incorperate edge case compensation when needed
 void Drive::setTurnSpeed(float turn)
 {
 	if((turn >= DEADZONE && autoTurn == false) || (turn <= -DEADZONE && autoTurn == false)) //changed this from : turn >= or turn <= or autoTurn
