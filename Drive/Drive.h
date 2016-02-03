@@ -10,28 +10,26 @@ public:
 	Drive();
 	~Drive();
 	
+	void drive(float xAxis, float yAxis, int POV);
+
 	void shift(bool highButton, bool lowButton);
 	bool getShiftState();
+
+	float getAvgEncVal();
 	
 	void setForwardSpeed(float forward);
-	
-	float getAvgEncVal();
-
 	void setTurnSpeed(float turn);
 	
 	void setLeftMotors(float velocity);
 	void setRightMotors(float velocity);
 
-	void drive(float xAxis, float yAxis, int POV);
-
-	// TJF: Test only function
-	void TestSpeedController(int device_id, float velocity);
-
 	float getGyroDashboard();
 
 	float linearizeDrive(float driveInput);
-
 	void setReferenceAngle(int angle);
+	void edgeCase();
+	float shortestPath();
+	float abs(float num);
 
 	AHRS* navX;
 
@@ -61,5 +59,7 @@ private:
 
 	float forwardSpeed;
 	float turnSpeed;
+
+	float gyroValue;
 };
 #endif

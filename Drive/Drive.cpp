@@ -21,9 +21,10 @@ Drive::Drive()
 	avgEncVal = 0;
 
 	status = 0;
-
-	//1/27/2016- 4:11 pm First test of this system. Robot moved on it's own, but PID was set in motion.
 	navX->ZeroYaw();
+	gyroValue = navX->GetYaw();
+	//1/27/2016- 4:11 pm First test of this system. Robot moved on it's own, but PID was set in motion.
+
 }
 
 Drive::~Drive()
@@ -79,15 +80,8 @@ void Drive::setForwardSpeed(float forward)
 
 void Drive::setReferenceAngle(int angle)
 {
-	if(angle == 270 && autoTurn == false)
+	if(autoTurn == false && (angle == 270 || angle == 180 || angle == 90 || angle == 0))
 	{
-		status = 1;
-		autoTurn = true;
-		referenceAngle = -90;
-	}
-	else if((angle == 90 && autoTurn == false) || (angle == 180 && autoTurn == false))
-	{
-		status = 1;
 		autoTurn = true;
 		referenceAngle = angle;
 	}
@@ -96,28 +90,51 @@ void Drive::setReferenceAngle(int angle)
 		referenceAngle = 0;//took this out (2/2/2016) still need ot test if this works - Carleton
 	}*/
 }
+
+float abs(float num)
+{
+	if(num < 0)
+	{
+		return -num;
+	}
+	return num;
+}
+
 //TODO: add a function for calculating for edges cases in gyro and compensating for them
-//TODO: add a function to calculate the shortest way (left or right) to the desired angle, incorperate edge case compensation when needed
+void Drive::edgeCase()
+{
+	if(gyroValue < 0)
+	{
+		gyroValue += 360;
+	}
+}
+
+float Drive::shortestPath()
+{
+	if(abs(referenceAngle - navX->GetYaw()) < abs(referenceAngle - gyroValue))
+	{
+		return referenceAngle - navX->GetYaw();
+	}
+
+	return referenceAngle - gyroValue;
+}
+
 void Drive::setTurnSpeed(float turn)
 {
 	if((turn >= DEADZONE && autoTurn == false) || (turn <= -DEADZONE && autoTurn == false)) //changed this from : turn >= or turn <= or autoTurn
 	{
-
-		status = 2;
 		turnSpeed = turn;
 
 		referenceAngle = 0;
 		navX->ZeroYaw();
 	}
-	else if(referenceAngle - navX->GetYaw() <= -1 || referenceAngle - navX->GetYaw() >= 1)//added the equal signs
+	else if(referenceAngle - gyroValue <= -1 || referenceAngle - gyroValue >= 1)//added the equal signs
 	{
-		status = 3;
-		turnSpeed = KP * (referenceAngle - navX->GetYaw());
+		turnSpeed = KP * shortestPath();
 	}
-	else if(referenceAngle - navX->GetYaw() > -1 && referenceAngle - navX->GetYaw() < 1)
+	else if(referenceAngle - gyroValue > -1 && referenceAngle - gyroValue < 1)
 	{
 		turnSpeed = 0;//since joystick is checked above, we can set turnSpeed to 0 since we know that nothing can happen with joystick and there is no error
-		status = 4;
 		autoTurn = false;//did this because some how autoTurn was set to false
 	}
 	//took out the else statement it had nothing in it
@@ -150,6 +167,8 @@ float Drive::linearizeDrive(float driveInput)
 
 void Drive::drive(float xAxis, float yAxis, int POV)
 {
+	gyroValue = navX->GetYaw();
+	edgeCase();
 	setReferenceAngle(POV);
 	setForwardSpeed(xAxis);
 	setTurnSpeed(yAxis);
