@@ -91,7 +91,7 @@ void Drive::setReferenceAngle(int angle)
 	}*/
 }
 
-float abs(float num)
+float Drive::abs(float num)
 {
 	if(num < 0)
 	{
@@ -125,8 +125,8 @@ void Drive::setTurnSpeed(float turn)
 	{
 		turnSpeed = turn;
 
-		referenceAngle = 0;
-		navX->ZeroYaw();
+		referenceAngle = gyroValue;//0
+		//navX->ZeroYaw();
 	}
 	else if(referenceAngle - gyroValue <= -1 || referenceAngle - gyroValue >= 1)//added the equal signs
 	{
