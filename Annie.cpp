@@ -22,6 +22,8 @@ private:
 	SendableChooser *chooser; //all the naming just follows the tutorial: http://wpilib.screenstepslive.com/s/4485/m/26401/l/255419-choosing-an-autonomous-program-from-smartdashboard
 	Autonomous *autonomous;
 
+	bool disable;
+
 	void RobotInit()
 	{
 		//drive->navX->ZeroYaw();
@@ -34,6 +36,8 @@ private:
 		catapult = new Catapult(oi);
 		chooser = new SendableChooser();
 		// took out 'autonomous = new Autonomous();' because it is initialized in chooser (below)
+
+		disable = true;
 
 		chooser->AddDefault("Go Straight Auto", new Autonomous(0)); //the second parameter require constructor not a function
 		chooser->AddObject("Random Auto",  new Autonomous(1));
@@ -62,6 +66,8 @@ private:
 
 	void TeleopPeriodic()
 	{
+		disable = true;
+
 		manip->toggleCompressor(oi->joyDrive->GetRawButton(COMPRESSOR_BUTTON));
 
 		//drive
@@ -80,9 +86,9 @@ private:
 		catapult->launchBall();
 		printSmartDashboard(); // 01/18/2016 moved this function because it needed to be updated constantly instead of initializing it only once.
 		//emergency stop test
-		if(oi->joyDrive->GetRawButton(7) == 1 && oi->joyDrive->GetRawButton(8) == 1)
+		if(oi->joyDrive->GetRawButton(7) == 1)
 		{
-			while(true)
+			while(disable == true)
 			{
 				drive->frontLeftMotor->Set(0);
 				drive->rearLeftMotor->Set(0);
@@ -90,6 +96,11 @@ private:
 				drive->rearRightMotor->Set(0);
 
 				SmartDashboard::PutBoolean("Dead Man Switch", true);
+
+				if(oi->joyDrive->GetRawButton(8) == 1)
+				{
+					disable = false;
+				}
 			}
 		}
 	}
@@ -104,7 +115,8 @@ private:
 
 		SmartDashboard::PutNumber("Reference Angle", drive->referenceAngle);
 
-		SmartDashboard::PutNumber("Status", drive->status);
+		SmartDashboard::PutBoolean("Auto Turn", drive->autoTurn);
+		SmartDashboard::PutBoolean("run?", drive->run);
 
 		//Returns Encoder Position(with tick)
 		//deleted two front motors because encoder is attached only to the back talons

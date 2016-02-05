@@ -40,7 +40,9 @@ public:
 
 	float avgEncVal; //average encoder value is used to give approximate accurate drive during autonomous
 
-	int status;//purely for debugging purposes take out after done
+	bool autoTurn;
+
+	bool run;
 
 	int referenceAngle;
 
@@ -54,8 +56,6 @@ private:
 	//moved drive motors in order to make it easier to print out values to smart dash board
 
 	DoubleSolenoid *shifter;
-
-	bool autoTurn;
 
 	float forwardSpeed;
 	float turnSpeed;

@@ -13,6 +13,7 @@ Drive::Drive()
 	navX = new AHRS(SPI::Port::kMXP);
 
 	autoTurn = false;
+	run = false;
 
 	referenceAngle = 0;
 
@@ -20,7 +21,6 @@ Drive::Drive()
 	turnSpeed = 0;
 	avgEncVal = 0;
 
-	status = 0;
 	navX->ZeroYaw();
 	gyroValue = navX->GetYaw();
 	//1/27/2016- 4:11 pm First test of this system. Robot moved on it's own, but PID was set in motion.
@@ -80,10 +80,16 @@ void Drive::setForwardSpeed(float forward)
 
 void Drive::setReferenceAngle(int angle)
 {
-	if(autoTurn == false && (angle == 270 || angle == 180 || angle == 90 || angle == 0))
+	if(autoTurn == false && (angle == 180 || angle == 90 || angle == 0))
 	{
 		autoTurn = true;
 		referenceAngle = angle;
+	}
+
+	else if(autoTurn == false && angle == 270)
+	{
+		autoTurn = true;
+		referenceAngle = -90;//trying this out
 	}
 	/*else if(angle != -1)//try taking this out
 	{
@@ -121,22 +127,25 @@ float Drive::shortestPath()
 
 void Drive::setTurnSpeed(float turn)
 {
+
 	if((turn >= DEADZONE && autoTurn == false) || (turn <= -DEADZONE && autoTurn == false)) //changed this from : turn >= or turn <= or autoTurn
 	{
 		turnSpeed = turn;
 
-		referenceAngle = gyroValue;//0
-		//navX->ZeroYaw();
+		referenceAngle = 0;
+		navX->ZeroYaw();
 	}
-	else if(referenceAngle - gyroValue <= -1 || referenceAngle - gyroValue >= 1)//added the equal signs
+	else if((referenceAngle - gyroValue <= -1 || referenceAngle - gyroValue >= 1) && (referenceAngle - navX->GetYaw() <= -1 || referenceAngle - navX->GetYaw() >= 1))//added the equal signs
 	{
 		turnSpeed = KP * shortestPath();
 	}
-	else if(referenceAngle - gyroValue > -1 && referenceAngle - gyroValue < 1)
+	else if((referenceAngle - gyroValue > -1 && referenceAngle - gyroValue < 1) || (referenceAngle - navX->GetYaw() > -1 && referenceAngle - navX->GetYaw() < 1))
 	{
+		run = true;
 		turnSpeed = 0;//since joystick is checked above, we can set turnSpeed to 0 since we know that nothing can happen with joystick and there is no error
 		autoTurn = false;//did this because some how autoTurn was set to false
 	}
+
 	//took out the else statement it had nothing in it
 }
 
@@ -167,6 +176,7 @@ float Drive::linearizeDrive(float driveInput)
 
 void Drive::drive(float xAxis, float yAxis, int POV)
 {
+	run = false;
 	gyroValue = navX->GetYaw();
 	edgeCase();
 	setReferenceAngle(POV);
