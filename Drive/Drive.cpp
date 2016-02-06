@@ -1,4 +1,5 @@
 #include "Drive.h"
+#include "Math.h"
 
 Drive::Drive()
 {
@@ -13,7 +14,6 @@ Drive::Drive()
 	navX = new AHRS(SPI::Port::kMXP);
 
 	autoTurn = false;
-	run = false;
 
 	referenceAngle = 0;
 
@@ -21,10 +21,11 @@ Drive::Drive()
 	turnSpeed = 0;
 	avgEncVal = 0;
 
+	error360 = 0;
+	error180 = 0;
+
 	navX->ZeroYaw();
 	gyroValue = navX->GetYaw();
-	//1/27/2016- 4:11 pm First test of this system. Robot moved on it's own, but PID was set in motion.
-
 }
 
 Drive::~Drive()
@@ -54,7 +55,6 @@ void Drive::shift(bool highButton, bool lowButton)
 
 bool Drive::getShiftState()
 {
-	//iflow gear
 	if(shifter->Get() == DoubleSolenoid::kForward)
 		return true;
 	return false;
@@ -80,7 +80,7 @@ void Drive::setForwardSpeed(float forward)
 
 void Drive::setReferenceAngle(int angle)
 {
-	if(autoTurn == false && (angle == 180 || angle == 90 || angle == 0))
+	/*if(autoTurn == false && (angle == 180 || angle == 90 || angle == 0))
 	{
 		autoTurn = true;
 		referenceAngle = angle;
@@ -90,23 +90,40 @@ void Drive::setReferenceAngle(int angle)
 	{
 		autoTurn = true;
 		referenceAngle = -90;//trying this out
-	}
-	/*else if(angle != -1)//try taking this out
-	{
-		referenceAngle = 0;//took this out (2/2/2016) still need ot test if this works - Carleton
 	}*/
+
+	//if(autoTurn == false)
+	//{
+		switch(angle)
+		{
+			case 270 :
+				navX->ZeroYaw();
+				referenceAngle = -90;
+				autoTurn = true;
+				break;
+			case 180 :
+			case 90 :
+			case 0 :
+				navX->ZeroYaw();
+				referenceAngle = angle;
+				autoTurn = true;
+				break;
+			default :
+				break;
+		}
+	//}
+
 }
 
-float Drive::abs(float num)
+/*float Drive::abs(float num)
 {
 	if(num < 0)
 	{
 		return -num;
 	}
 	return num;
-}
+}*/
 
-//TODO: add a function for calculating for edges cases in gyro and compensating for them
 void Drive::edgeCase()
 {
 	if(gyroValue < 0)
@@ -117,73 +134,80 @@ void Drive::edgeCase()
 
 float Drive::shortestPath()
 {
-	if(abs(referenceAngle - navX->GetYaw()) < abs(referenceAngle - gyroValue))
+	if(std::abs(error180) < std::abs(error360))//using cMath absolute value function
 	{
-		return referenceAngle - navX->GetYaw();
+		return error180;
 	}
 
-	return referenceAngle - gyroValue;
+	return error360;
 }
 
 void Drive::setTurnSpeed(float turn)
 {
 
-	if((turn >= DEADZONE && autoTurn == false) || (turn <= -DEADZONE && autoTurn == false)) //changed this from : turn >= or turn <= or autoTurn
+	if(/*autoTurn == false &&*/ turn >= DEADZONE || turn <= -DEADZONE)
 	{
 		turnSpeed = turn;
+
+		autoTurn = false;
 
 		referenceAngle = 0;
 		navX->ZeroYaw();
 	}
-	else if((referenceAngle - gyroValue <= -1 || referenceAngle - gyroValue >= 1) && (referenceAngle - navX->GetYaw() <= -1 || referenceAngle - navX->GetYaw() >= 1))//added the equal signs
+	else if((error360 <= -.5 || error360 >= .5) && (error180 <= -.5 || error180 >= .5))//added the equal signs
 	{
 		turnSpeed = KP * shortestPath();
 	}
-	else if((referenceAngle - gyroValue > -1 && referenceAngle - gyroValue < 1) || (referenceAngle - navX->GetYaw() > -1 && referenceAngle - navX->GetYaw() < 1))
+	else if(gyroValue == referenceAngle || navX->GetYaw() == referenceAngle) //if((referenceAngle - gyroValue > -1 && referenceAngle - gyroValue < 1) || (referenceAngle - navX->GetYaw() > -1 && referenceAngle - navX->GetYaw() < 1))
 	{
-		run = true;
-		turnSpeed = 0;//since joystick is checked above, we can set turnSpeed to 0 since we know that nothing can happen with joystick and there is no error
-		autoTurn = false;//did this because some how autoTurn was set to false
+		turnSpeed = 0;
+		autoTurn = false;
+		navX->ZeroYaw();
+		gyroValue = 0;
+		referenceAngle = 0;
+		//Testing relative turns for Auto Turning 2/6/16
 	}
-
-	//took out the else statement it had nothing in it
 }
-
-// TJF: Swapped motor logic to reflect physical robot configuration instead of reversing everything.
 
 void Drive::setLeftMotors(float velocity)
 {
-	frontLeftMotor->Set(velocity); //frontLeftMotor->Set(-velocity);
-	rearLeftMotor->Set(velocity); //rearLeftMotor->Set(-velocity);
+	frontLeftMotor->Set(velocity);
+	rearLeftMotor->Set(velocity);
 }
 
 void Drive::setRightMotors(float velocity)
 {
-	frontRightMotor->Set(-velocity); //frontRightMotor->Set(velocity);
-	rearRightMotor->Set(-velocity); //rearRightMotor->Set(velocity);
+	frontRightMotor->Set(-velocity);
+	rearRightMotor->Set(-velocity);
 }
 
 float Drive::linearizeDrive(float driveInput)
 {
-	/*if(driveInput > SPEEDLIMIT || driveInput < SPEEDLIMIT)
-	{
-		return SPEEDLIMIT;
-	}
-	return driveInput;*/
-
-	return ((driveInput * SLOPE_ADJUSTMENT) /*- SLOPE_ADJUSTMENT*/);
+	return driveInput * SLOPE_ADJUSTMENT;
 }
 
 void Drive::drive(float xAxis, float yAxis, int POV)
 {
-	run = false;
 	gyroValue = navX->GetYaw();
 	edgeCase();
 	setReferenceAngle(POV);
 	setForwardSpeed(xAxis);
+
+	error360 = referenceAngle - gyroValue;
+	error180 = referenceAngle - navX->GetYaw();
+
 	setTurnSpeed(yAxis);
 
 	setLeftMotors(linearizeDrive(forwardSpeed - turnSpeed));
 	setRightMotors(linearizeDrive(forwardSpeed + turnSpeed));
 }
 
+float Drive::returnMotorInputRight()
+{
+	return linearizeDrive(forwardSpeed + turnSpeed);
+}
+
+float Drive::returnMotorInputLeft()
+{
+	return linearizeDrive(forwardSpeed - turnSpeed);
+}

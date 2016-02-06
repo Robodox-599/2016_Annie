@@ -49,6 +49,8 @@ private:
 		printSmartDashboard();//added this command because the smart dashboard might need to be updated will take out if unneeded
 		autonomousCommand = (Command *) chooser->GetSelected(); //Sends which autonomous was chosen
 		autonomousCommand->Start();
+
+		drive->navX->ZeroYaw();
 	}
 
 	void AutonomousPeriodic()
@@ -61,7 +63,7 @@ private:
 
 	void TeleopInit()
 	{
-
+		drive->navX->ZeroYaw();
 	}
 
 	void TeleopPeriodic()
@@ -115,8 +117,8 @@ private:
 
 		SmartDashboard::PutNumber("Reference Angle", drive->referenceAngle);
 
-		SmartDashboard::PutBoolean("Auto Turn", drive->autoTurn);
-		SmartDashboard::PutBoolean("run?", drive->run);
+		SmartDashboard::PutNumber("left motor input", drive->returnMotorInputLeft());
+		SmartDashboard::PutNumber("right motor input", drive->returnMotorInputRight());
 
 		//Returns Encoder Position(with tick)
 		//deleted two front motors because encoder is attached only to the back talons

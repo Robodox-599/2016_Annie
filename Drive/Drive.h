@@ -29,7 +29,10 @@ public:
 	void setReferenceAngle(int angle);
 	void edgeCase();
 	float shortestPath();
-	float abs(float num);
+
+	float returnMotorInputRight();
+	float returnMotorInputLeft();
+	//float abs(float num);
 
 	AHRS* navX;
 
@@ -42,7 +45,8 @@ public:
 
 	bool autoTurn;
 
-	bool run;
+	float error360;
+	float error180;
 
 	int referenceAngle;
 
