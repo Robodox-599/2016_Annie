@@ -61,7 +61,7 @@ private:
 
 		//drive
 		drive->drive(oi->joyDrive->GetRawAxis(FORWARD_Y_AXIS), oi->joyDrive->GetRawAxis(TURN_X_AXIS));
-		drive->shift(oi->joyDrive->GetRawButton(8), oi->joyDrive->GetRawButton(9));
+		//drive->shift(oi->joyDrive->GetRawButton(8), oi->joyDrive->GetRawButton(9));
 
 		//manipulator
 		// TJF: Replaced "magic numbers" with named constants
