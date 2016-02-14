@@ -2,8 +2,8 @@
 
 Drive::Drive()
 {
-	shifter = new DoubleSolenoid(SHIFTER_CHANNEL, SHIFTER_B);
-	shifter->Set(DoubleSolenoid::kReverse);
+	//shifter = new DoubleSolenoid(SHIFTER_CHANNEL, SHIFTER_B);
+	//shifter->Set(DoubleSolenoid::kReverse);
 	
 	frontLeftMotor = new CANTalon(DRIVE_FRONT_LEFT_MOTOR_CHANNEL);
 	rearLeftMotor = new CANTalon(DRIVE_REAR_LEFT_MOTOR_CHANNEL);
@@ -18,20 +18,20 @@ Drive::Drive()
 
 Drive::~Drive()
 {
-	delete shifter;
+	//delete shifter;
 	delete frontLeftMotor;
 	delete rearLeftMotor;
 	delete frontRightMotor;
 	delete rearRightMotor;
 	
-	shifter = NULL;
+	//shifter = NULL;
 	frontLeftMotor = NULL;
 	rearLeftMotor = NULL;
 	frontRightMotor = NULL;
 	rearRightMotor = NULL;
 }
 
-void Drive::shift(bool highButton, bool lowButton)
+/*void Drive::shift(bool highButton, bool lowButton)
 {	
 	if(lowButton)
 		shifter->Set(DoubleSolenoid::kForward);
@@ -45,7 +45,7 @@ bool Drive::getShiftState()
 	if(shifter->Get() == DoubleSolenoid::kForward)
 		return true;
 	return false;
-}
+}*/
 
 float Drive::setLinVelocity(float linVal)
 {
