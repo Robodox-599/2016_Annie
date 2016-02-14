@@ -10,8 +10,8 @@ public:
 	Drive();
 	~Drive();
 	
-	void shift(bool highButton, bool lowButton);
-	bool getShiftState();
+	//void shift(bool highButton, bool lowButton);
+	//bool getShiftState();
 	
 	float setLinVelocity(float linVal);
 	
@@ -46,7 +46,7 @@ private:
 
 	//moved drive motors in order to make it easier to print out values to smart dash board
 
-	DoubleSolenoid *shifter;
+	//DoubleSolenoid *shifter;
 	float leftCmd;
 	float rightCmd;
 };
